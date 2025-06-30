@@ -103,6 +103,7 @@ class Form(StatesGroup):
     name = State()
     age = State()
     elo = State()
+    username = State()
 @command_router.message(Command("verify"))
 async def verify(m:Message,state:FSMContext):
     await m.answer("Напиши свой ник")
@@ -112,15 +113,29 @@ async def name_answer (m:Message,state:FSMContext):
     await state.update_data(name=m.text)
     await state.set_state(Form.age)
     await m.answer(text = "Сколько тебе лет?")
-@command_router.message(Form.age,F.text.isdigit())
+@command_router.message(Form.age, F.text.isdigit())
 async def age_answer (m:Message,state:FSMContext):
     await state.update_data(age = m.text)
     data = await state.get_data()
-    await state.set_state(Form.elo)
-    await m.answer(text= f"Приятно познакомиться,{data['name']}\n сколько эло у тебя на данный момент?")
-@command_router.message(Form.elo,int(F.text)>5000 )
+    a = int(data['age'])
+    if a < 100:
+        data = await state.get_data()
+        await state.set_state(Form.elo)
+        await m.answer(text= f"Приятно познакомиться,{data['name']}\n сколько эло у тебя на данный момент?")
+    else:
+        await m.answer(text="Некорректный возраст,введите свой реальный возраст")
+@command_router.message(Form.elo,F.text.isdigit())
 async def elo_answer (m:Message,state:FSMContext):
     await state.update_data(elo = m.text)
     data = await state.get_data()
-    await m.answer(text = f"Ваша заявка принята\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\n")
-    await state.clear()
+    b = int(data['elo'])
+    if b < 5000:
+        await state.set_state(Form.username)
+        await m.answer(text = f"Введи свой юзернейм в тг")
+    else:
+        await m.answer("Введите реальное кол-во эло")
+@command_router.message(Form.username,)
+async def username(m:Message,state:FSMContext):
+    await state.update_data(user = m.text)
+    data = await state.get_data()
+    await m.answer(text = f"Ваша заявка принята\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\nКонтакт для связи {data['username']}")
