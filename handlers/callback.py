@@ -15,7 +15,7 @@ async def send_test_text(callback: CallbackQuery):
 @callback_router.callback_query(F.data == "helping")
 async def helping(callback: CallbackQuery):
     await callback.answer("бог тебе в помощь ")
-    await callback.message.answer(text= "<span class=\"tg-spoiler\">@daniilgino</span> я тебе помогу",parse_mode="HTML")
+    await callback.message.answer_photo(photo="https://img16.rl0.ru/afisha/e375x235p1147x364f1670x1047q85i/s3.afisha.ru/mediastorage/a9/7f/7f1cf8f4ec4f41c5a62674107fa9.jpg",caption= "<span class=\"tg-spoiler\">@daniilgino</span> я тебе помогу",parse_mode="HTML")
 @callback_router.callback_query(F.data == "team")
 async def team(callback: CallbackQuery):
     await callback.answer("Ищем команды")

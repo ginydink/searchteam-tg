@@ -1,9 +1,9 @@
-
-
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message,InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram import Router,F
 from aiogram.filters import Command,or_f
-
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.storage.memory import MemoryStorage
 
 command_router = Router()
 from keyboards.inline import search_kb, help_kb, training_kb,choicer_kb,back_menu,random_case
@@ -83,11 +83,7 @@ async def get_age(m:Message):
 @command_router.message(Command("choice"))
 async def choice(m:Message):
     what_choice = "Выбери кого ты хочешь найти"
-    await m.answer(photo = "https://cs-config.ru/_ld/12/42477246.png",text=what_choice,reply_markup=choicer_kb)
-@command_router.message(Command("verify"))
-async def verify(m:Message):
-    good_verify = "Спасибо теперь ты зарегистрирован, дальше используй /choice"
-    await m.answer(text=good_verify)
+    await m.answer_photo(photo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZ9rVT3SIKqVxbPu1JM50MV7oahA3jSId3iH9ov2dAM2cnogyneT7DLYGMBlU6RDadiLmUMvCX48XBKbTNrXcHjnxk3olqEtm9Kr3obY9RZgTUVY3yomgOOKh59ZUJgufR55gsaLVs8qo/w1200-h630-p-k-no-nu/vin.jpg",caption=what_choice,reply_markup=choicer_kb)
 @command_router.message(Command("menu"))
 async def back(m:Message):
     back_men = "Выберите что вы хотите сделать"
@@ -103,3 +99,28 @@ async def maps(m:Message):
         options = ["Mirage","Dust 2","Nuke","Inferno","Anubis"],
         is_anonymous = False
     )
+class Form(StatesGroup):
+    name = State()
+    age = State()
+    elo = State()
+@command_router.message(Command("verify"))
+async def verify(m:Message,state:FSMContext):
+    await m.answer("Напиши свой ник")
+    await state.set_state(Form.name)
+@command_router.message(Form.name)
+async def name_answer (m:Message,state:FSMContext):
+    await state.update_data(name=m.text)
+    await state.set_state(Form.age)
+    await m.answer(text = "Сколько тебе лет?")
+@command_router.message(Form.age,F.text.isdigit())
+async def age_answer (m:Message,state:FSMContext):
+    await state.update_data(age = m.text)
+    data = await state.get_data()
+    await state.set_state(Form.elo)
+    await m.answer(text= f"Приятно познакомиться,{data['name']}\n сколько эло у тебя на данный момент?")
+@command_router.message(Form.elo,int(F.text)>5000 )
+async def elo_answer (m:Message,state:FSMContext):
+    await state.update_data(elo = m.text)
+    data = await state.get_data()
+    await m.answer(text = f"Ваша заявка принята\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\n")
+    await state.clear()

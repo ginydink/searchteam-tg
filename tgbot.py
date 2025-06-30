@@ -3,6 +3,9 @@ from aiogram import Bot, Dispatcher
 from handlers.commands import command_router
 from config import TOKEN
 from handlers.callback import callback_router
+from aiogram.fsm.state import State, StatesGroup
+
+from aiogram.fsm.storage.memory import MemoryStorage
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
