@@ -39,3 +39,9 @@ random_case = InlineKeyboardMarkup(
          InlineKeyboardButton(text="skin🔫",callback_data="skin")]
     ]
 )
+next_user = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="next player",callback_data="player"),
+         InlineKeyboardButton(text="next team",callback_data="team")]
+    ]
+)
