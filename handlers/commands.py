@@ -4,7 +4,7 @@ from aiogram import Router,F
 from aiogram.filters import Command,or_f
 from aiogram.fsm.state import State, StatesGroup
 
-from handlers.database import add_user,show_table
+from handlers.database import add_user
 command_router = Router()
 from keyboards.inline import search_kb, help_kb, training_kb,choicer_kb,back_menu,random_case
 @command_router.message((Command("start")))
@@ -145,5 +145,5 @@ async def username_sys(m:Message,state:FSMContext):
         elo = int(data['elo']),
         username = data['username']
     )
-    await m.answer(text = f"Ваша заявка принята\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\nКонтакт для связи {data['username']}")
+    await m.answer(text = f"Ваша заявка принята✅\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\nКонтакт для связи {data['username']}")
     await state.clear()
