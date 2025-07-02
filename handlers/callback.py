@@ -53,11 +53,12 @@ async def select(callback:CallbackQuery):
     await callback.answer("Не отчаивайся")
     t = get_name()
     player  = random.choice(t)
-    await callback.message.edit_text(text = str(f"Nickname {player[0]},\nВозраст {player[2]}\nКол-во эло {player[1]}\nКонтакт для связи {player[3]}"),reply_markup=like_player)
+    await callback.message.delete()
+    await callback.message.answer(text = str(f"Nickname {player[0]},\nВозраст {player[2]}\nКол-во эло {player[1]}\nКонтакт для связи {player[3]}"),reply_markup=like_player)
 @callback_router.callback_query(F.data == "yes")
 async def yes(callback:CallbackQuery):
     await callback.answer("Спасибо за использование бота")
-    await callback.message.answer_photo(photo="https://open-images.acast.com/shows/67282bf5ce5bc563cb7669da/1736127936400-01e65e0d-784e-4d66-9237-f99895fee5d8.jpeg?height=750",caption = "/menu чтобы перейти в меню или\n/search чтобы продолжить поиск")
+    await callback.message.answer_photo(photo="https://open-images.acast.com/shows/67282bf5ce5bc563cb7669da/1736127936400-01e65e0d-784e-4d66-9237-f99895fee5d8.jpeg?height=750",caption = "/menu чтобы перейти в меню или\n/choice чтобы продолжить поиск")
 @callback_router.callback_query(F.data == "antitilt")
 async def tilt(callback:CallbackQuery):
     await callback.answer("у тебя все получится")

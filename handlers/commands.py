@@ -104,6 +104,7 @@ class Form(StatesGroup):
     age = State()
     elo = State()
     username = State()
+    menus = State()
 @command_router.message(Command("verify"))
 async def verify(m:Message,state:FSMContext):
     await m.answer("Напиши свой ник")
@@ -145,5 +146,10 @@ async def username_sys(m:Message,state:FSMContext):
         elo = int(data['elo']),
         username = data['username']
     )
-    await m.answer(text = f"Ваша заявка принята✅\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\nКонтакт для связи {data['username']}")
+    await state.set_state(Form.menus)
+    await m.answer(text = f"Ваша заявка принята✅\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\nКонтакт для связи {data['username']}\nНапиши что-то для продолжения работы бота")
+@command_router.message(Form.menus)
+async def menus_update(m:Message,state:FSMContext):
+    await state.update_data(menus = m.text)
+    await m.answer_photo(photo = "https://media.istockphoto.com/id/1172427455/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BA%D1%80%D0%B0%D1%81%D0%B8%D0%B2%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BA%D0%B0%D1%82-%D0%BD%D0%B0%D0%B4-%D1%82%D1%80%D0%BE%D0%BF%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC-%D0%BC%D0%BE%D1%80%D0%B5%D0%BC.jpg?s=612x612&w=0&k=20&c=mMM_lQ6H5YKUc4vT87reiS8wGxhc66lEyrUuBm15J3M=",caption="выбери что ты хочешь сделать",reply_markup=back_menu)
     await state.clear()
