@@ -1,6 +1,5 @@
 from aiogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 
-from handlers.callback import callback_router
 
 search_kb = InlineKeyboardMarkup(
     inline_keyboard=[
@@ -43,5 +42,12 @@ next_user = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text="next player",callback_data="player"),
          InlineKeyboardButton(text="next team",callback_data="team")]
+    ]
+)
+like_player = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="👍",callback_data="yes"),
+         InlineKeyboardButton(text="👎",callback_data="no")
+         ]
     ]
 )

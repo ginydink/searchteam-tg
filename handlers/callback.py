@@ -1,9 +1,9 @@
+import random
 from random import randint
-from handlers.database import add_user,show_table
+from handlers.database import add_user, get_name
 from aiogram import Router,F
 from aiogram.types import CallbackQuery
-from keyboards.inline import next_user
-from handlers.commands import command_router
+from keyboards.inline import next_user,like_player
 
 callback_router = Router()
 
@@ -23,7 +23,9 @@ async def team(callback: CallbackQuery):
 @callback_router.callback_query(F.data == "player")
 async def player(callback:CallbackQuery):
     await callback.answer("Ищем игроков")
-    await callback.message.answer(text = str(show_table()),reply_markup=next_user)
+    t = get_name()
+    player  = random.choice(t)
+    await callback.message.answer(text = str(player),reply_markup=like_player)
 @callback_router.callback_query(F.data == "knife")
 async def luck(callback:CallbackQuery):
     b = randint(5000,15000)
@@ -46,3 +48,13 @@ async def luck(callback:CallbackQuery):
         b = randint(1, 2500)
         await callback.answer("lucky")
         await callback.message.answer(f"Скин за {b}р это солидный выигрыш")
+@callback_router.callback_query(F.data == "no")
+async def select(callback:CallbackQuery):
+    await callback.answer("Не отчаивайся")
+    t = get_name()
+    player  = random.choice(t)
+    await callback.message.edit_text(text = str(player),reply_markup=like_player)
+@callback_router.callback_query(F.data == "yes")
+async def yes(callback:CallbackQuery):
+    await callback.answer
+

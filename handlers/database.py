@@ -1,3 +1,4 @@
+import random
 import sqlite3
 from idlelib.colorizer import prog_group_name_to_tag
 
@@ -25,23 +26,9 @@ def add_user (user_id,name,age,elo,username):
             username = excluded.username
         ''',(user_id,name,age,elo,username))
     conn.commit()
-def show_table():
-    res = cursor.execute('''
-        SELECT * FROM users
-    ''')
-    return res.fetchall()
-
-print(show_table())
 def get_name ():
     t = cursor.execute('''
-        SELECT name FROM users
+        SELECT name,elo,age,username FROM users
     ''')
-    b = cursor.execute('''
-            SELECT elo FROM users
-        ''')
-
-    r = cursor.execute('''
-            SELECT age FROM users
-        ''')
-    print(r,b,t)
+    return t.fetchall()
 

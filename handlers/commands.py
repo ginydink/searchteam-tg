@@ -17,7 +17,7 @@ async def about_handler(message:Message):
     about_text = (
     "Устал сливать эло на фасике?\n"
     "Тогда этот бот идеальное решение для тебя,ведь здесь ты всегда можешь найти игроков по своему скилу и просто друзей \n"
-    "Если хочешь еще играть и с красивыми скинчиками, то переходи в этого бота @skin_builds_bot закупапйся и кайфуй"
+    "Если хочешь еще играть и с красивыми скинчиками, то переходи в этого бота @skin_builds_bot закупайся и кайфуй"
 )
     await message.answer(text= about_text)
 @command_router.message(F.text.lower().contains("привет"))
@@ -121,7 +121,7 @@ async def age_answer (m:Message,state:FSMContext):
     if a < 100:
         data = await state.get_data()
         await state.set_state(Form.elo)
-        await m.answer(text= f"Приятно познакомиться,{data['name']}\n сколько эло у тебя на данный момент?")
+        await m.answer(text= f"Приятно познакомиться, {data['name']}\n сколько эло у тебя на данный момент?")
     else:
         await m.answer(text="Некорректный возраст,введите свой реальный возраст")
 @command_router.message(Form.elo,F.text.isdigit())
