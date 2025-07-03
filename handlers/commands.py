@@ -4,7 +4,7 @@ from aiogram import Router,F
 from aiogram.filters import Command,or_f
 from aiogram.fsm.state import State, StatesGroup
 
-from handlers.database import add_user
+from handlers.database import add_user,add_team
 command_router = Router()
 from keyboards.inline import search_kb, help_kb, training_kb,choicer_kb,back_menu,random_case
 @command_router.message((Command("start")))
@@ -150,6 +150,54 @@ async def username_sys(m:Message,state:FSMContext):
     await m.answer(text = f"Ваша заявка принята✅\nТвой ник {data['name']}\nВозраст {data['age']}\nКол-во эло {data['elo']}\nКонтакт для связи {data['username']}\nНапиши что-то для продолжения работы бота")
 @command_router.message(Form.menus)
 async def menus_update(m:Message,state:FSMContext):
+    await m.answer_photo(photo = "https://media.istockphoto.com/id/1172427455/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BA%D1%80%D0%B0%D1%81%D0%B8%D0%B2%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BA%D0%B0%D1%82-%D0%BD%D0%B0%D0%B4-%D1%82%D1%80%D0%BE%D0%BF%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC-%D0%BC%D0%BE%D1%80%D0%B5%D0%BC.jpg?s=612x612&w=0&k=20&c=mMM_lQ6H5YKUc4vT87reiS8wGxhc66lEyrUuBm15J3M=",caption="выбери что ты хочешь сделать",reply_markup=back_menu)
+    await state.clear()
+class Form(StatesGroup):
+    team = State()
+    mid_age = State()
+    description = State()
+    usernam = State()
+    menu = State()
+@command_router.message(Command("reg_team"))
+async def verify(m:Message,state:FSMContext):
+    await m.answer("Напиши название команды")
+    await state.set_state(Form.team)
+@command_router.message(Form.team)
+async def name_answer (m:Message,state:FSMContext):
+    await state.update_data(team=m.text)
+    await state.set_state(Form.mid_age)
+    await m.answer(text = "Какой средний возраст игроков в вашей команде")
+@command_router.message(Form.mid_age, F.text.isdigit())
+async def age_answer (m:Message,state:FSMContext):
+    await state.update_data(mid_age = m.text)
+    data = await state.get_data()
+    a = int(data['mid_age'])
+    if a < 100:
+        data = await state.get_data()
+        await state.set_state(Form.description)
+        await m.answer(text= f"Хорошое название, {data['team']}\nнапиши немного о своей команде")
+    else:
+        await m.answer(text="Некорректный возраст,введите свой реальный возраст")
+@command_router.message(Form.description,F.text)
+async def elo_answer (m:Message,state:FSMContext):
+    await state.update_data(description = m.text)
+    await m.answer(text = f"Введи свой юзернейм в тг")
+    await state.set_state(Form.usernam)
+@command_router.message(Form.usernam,F.text)
+async def username_sys(m:Message,state:FSMContext):
+    await state.update_data(usernam = m.text)
+    data = await state.get_data()
+    add_team(
+        user_id = m.from_user.id,
+        team = data['team'],
+        mid_age = int(data['mid_age']),
+        description = data['description'],
+        usernam = data['usernam']
+    )
+    await state.set_state(Form.menu)
+    await m.answer(text = f"Ваша заявка принята✅\nНазвание твоей команды {data['team']}\nСредний возраст в команде {data['mid_age']}\nКраткое описание команды {data['description']}\nКонтакт для связи {data['usernam']}\nНапиши что-то для продолжения работы бота")
+@command_router.message(Form.menu)
+async def menus_updat(m:Message,state:FSMContext):
     await state.update_data(menus = m.text)
     await m.answer_photo(photo = "https://media.istockphoto.com/id/1172427455/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BA%D1%80%D0%B0%D1%81%D0%B8%D0%B2%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BA%D0%B0%D1%82-%D0%BD%D0%B0%D0%B4-%D1%82%D1%80%D0%BE%D0%BF%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC-%D0%BC%D0%BE%D1%80%D0%B5%D0%BC.jpg?s=612x612&w=0&k=20&c=mMM_lQ6H5YKUc4vT87reiS8wGxhc66lEyrUuBm15J3M=",caption="выбери что ты хочешь сделать",reply_markup=back_menu)
     await state.clear()

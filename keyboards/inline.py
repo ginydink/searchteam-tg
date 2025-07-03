@@ -28,7 +28,9 @@ back_menu = InlineKeyboardMarkup(
         InlineKeyboardButton(text="найти игрока💋", callback_data="player")],
         [InlineKeyboardButton(text= "help🥺", callback_data="helping"),
          InlineKeyboardButton(text="tgk❤️", url="https://t.me/rishe1ie")],
-        [InlineKeyboardButton(text="антитильт",callback_data="antitilt")]
+        [InlineKeyboardButton(text="антитильт",callback_data="antitilt"),
+         InlineKeyboardButton(text="reg team",callback_data="reg")
+         ]
 
 
     ]
@@ -49,6 +51,13 @@ like_player = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text="👍",callback_data="yes"),
          InlineKeyboardButton(text="👎",callback_data="no")
+         ]
+    ]
+)
+like_team = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text = "👍",callback_data="yessir"),
+         InlineKeyboardButton(text="👎",callback_data="nos")
          ]
     ]
 )
