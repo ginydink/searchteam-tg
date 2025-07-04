@@ -56,7 +56,7 @@ like_player = InlineKeyboardMarkup(
 )
 like_team = InlineKeyboardMarkup(
     inline_keyboard=[
-        [InlineKeyboardButton(text = "👍",callback_data="yessir"),
+        [InlineKeyboardButton(text = "👍",callback_data="yes"),
          InlineKeyboardButton(text="👎",callback_data="nos")
          ]
     ]

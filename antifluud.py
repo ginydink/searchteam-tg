@@ -1,5 +1,5 @@
 import time
-from mailbox import Message
+
 
 from aiogram import BaseMiddleware
 from aiogram.types import Message

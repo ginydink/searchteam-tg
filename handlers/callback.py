@@ -1,20 +1,18 @@
 import random
-from codecs import replace_errors
+
 from random import randint
-from handlers.database import add_user, get_name,get_team
-from aiogram import Router,F
+from handlers.database import get_name,get_team
 from aiogram.types import CallbackQuery
 from keyboards.inline import like_player,like_team
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram import Router,F
-from aiogram.filters import Command,or_f
 from aiogram.fsm.state import State, StatesGroup
 
-from handlers.database import add_user,add_team
+from handlers.database import add_team
 command_router = Router()
-from keyboards.inline import search_kb, help_kb, training_kb,choicer_kb,back_menu,random_case
+from keyboards.inline import back_menu
 callback_router = Router()
 
 

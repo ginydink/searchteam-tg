@@ -1,7 +1,7 @@
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram import Router,F
-from aiogram.filters import Command,or_f
+from aiogram.filters import Command
 from aiogram.fsm.state import State, StatesGroup
 
 from handlers.database import add_user,add_team

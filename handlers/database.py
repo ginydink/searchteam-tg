@@ -1,6 +1,5 @@
-import random
+
 import sqlite3
-from idlelib.colorizer import prog_group_name_to_tag
 
 conn = sqlite3.connect("users.db")
 cursor = conn.cursor()
