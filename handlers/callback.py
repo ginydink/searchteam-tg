@@ -94,12 +94,12 @@ class Form(StatesGroup):
 async def verify(m:Message,state:FSMContext):
     await m.answer("Напиши название команды")
     await state.set_state(Form.team)
-@callback_router.callback_query(Form.team)
+@callback_router.message(Form.team)
 async def name_answer (m:Message,state:FSMContext):
     await state.update_data(team=m.text)
     await state.set_state(Form.mid_age)
     await m.answer(text = "Какой средний возраст игроков в вашей команде")
-@callback_router.callback_query(Form.mid_age, F.text.isdigit())
+@callback_router.message(Form.mid_age, F.text.isdigit())
 async def age_answer (m:Message,state:FSMContext):
     await state.update_data(mid_age = m.text)
     data = await state.get_data()
@@ -110,12 +110,12 @@ async def age_answer (m:Message,state:FSMContext):
         await m.answer(text= f"Хорошое название, {data['team']}\nнапиши немного о своей команде")
     else:
         await m.answer(text="Некорректный возраст,введите свой реальный возраст")
-@callback_router.callback_query(Form.description,F.text)
+@callback_router.message(Form.description,F.text)
 async def elo_answer (m:Message,state:FSMContext):
     await state.update_data(description = m.text)
     await m.answer(text = f"Введи свой юзернейм в тг")
     await state.set_state(Form.usernam)
-@callback_router.callback_query(Form.usernam,F.text)
+@callback_router.message(Form.usernam,F.text)
 async def username_sys(m:Message,state:FSMContext):
     await state.update_data(usernam = m.text)
     data = await state.get_data()
@@ -128,7 +128,7 @@ async def username_sys(m:Message,state:FSMContext):
     )
     await state.set_state(Form.menu)
     await m.answer(text = f"Ваша заявка принята✅\nНазвание твоей команды {data['team']}\nСредний возраст в команде {data['mid_age']}\nКраткое описание команды {data['description']}\nКонтакт для связи {data['usernam']}\nНапиши что-то для продолжения работы бота")
-@callback_router.callback_query(Form.menu)
+@callback_router.message(Form.menu)
 async def menus_updat(m:Message,state:FSMContext):
     await state.update_data(menus = m.text)
     await m.answer_photo(photo = "https://media.istockphoto.com/id/1172427455/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BA%D1%80%D0%B0%D1%81%D0%B8%D0%B2%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BA%D0%B0%D1%82-%D0%BD%D0%B0%D0%B4-%D1%82%D1%80%D0%BE%D0%BF%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC-%D0%BC%D0%BE%D1%80%D0%B5%D0%BC.jpg?s=612x612&w=0&k=20&c=mMM_lQ6H5YKUc4vT87reiS8wGxhc66lEyrUuBm15J3M=",caption="выбери что ты хочешь сделать",reply_markup=back_menu)
