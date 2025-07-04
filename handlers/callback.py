@@ -35,7 +35,7 @@ async def player(callback:CallbackQuery):
     await callback.answer("Ищем игроков")
     t = get_name()
     player  = random.choice(t)
-    await callback.message.answer(text = str(f"Nickname {player[0]},\nВозраст {player[2]}\nКол-во эло {player[2]}\nКонтакт для связи {player[3]}"),reply_markup=like_player)
+    await callback.message.answer(text = str(f"Nickname {player[0]},\nВозраст {player[2]}\nКол-во эло {player[1]}\nКонтакт для связи {player[3]}"),reply_markup=like_player)
 @callback_router.callback_query(F.data == "knife")
 async def luck(callback:CallbackQuery):
     b = randint(5000,15000)
